@@ -1,22 +1,18 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "./type.actions";
+import React from 'react';
+import Form from '../../components/Form.jsx';
+import '../../sass/pages/_SignIn.scss';
 
-/* Authentication actions */
-export const loginSuccess = (token) => {
-    return {
-        type: LOGIN_SUCCESS,
-        payload: token,
-    }
+/* Login page */
+function Login () {
+    return (
+        <div className='signin-page'>
+            <main className='bg-dark'>
+                {/* Returns form component */}
+                < Form />
+            </main>
+        </div>
+        
+    )
 }
 
-export const loginFailed = (error) => {
-    return {
-        type: LOGIN_FAIL,
-        payload: error,
-    }
-}
-
-export const logout = () => {
-    return {
-        type: LOGOUT,
-    }
-} 
+export default Login;
