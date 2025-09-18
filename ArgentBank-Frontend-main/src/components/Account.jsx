@@ -11,7 +11,7 @@ function Account ({ title, amount, description }) {
                 <p className='account-amount'>{amount}</p>
                 <p className='account-amount-description'>{description}</p>
             </div>
-            <div className='account-content- wrapper cta'>
+            <div className='account-content-wrapper cta'>
                 <button className='transaction-button'>View transactions</button>
             </div>
 
