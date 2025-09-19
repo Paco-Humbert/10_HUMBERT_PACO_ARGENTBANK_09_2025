@@ -1,7 +1,7 @@
 import React from "react";
 import '../sass/components/_Item.scss';
 
-/* Component function that returns the items from the home page */
+/* Fonction composant qui retourne les éléments de la page d'accueil */
 function Item ({ image, descriptionImage, title, description }) {
     return (
             <div className="feature-item">

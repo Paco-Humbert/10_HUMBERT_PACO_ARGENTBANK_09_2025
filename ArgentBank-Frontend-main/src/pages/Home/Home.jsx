@@ -22,12 +22,12 @@ function Home () {
                 <Banner />
                 <section className="features">
                     <h2 className='sr-only'>Features</h2>
-                    {/* Return items from json file with map */}
+                    {/* Génère dynamiquement les "features" en parcourant le fichier JSON */}
                     {FeaturesItemData.map((data) => (
-                        /* Return item component */
+                        /* Affiche un composant Item pour chaque entrée du JSON */
                         < Item 
-                            key={data.id}
-                            image={imageData[data.image]}
+                            key={data.id} /* Clé unique pour React */
+                            image={imageData[data.image]} /* Image correspondante */
                             descriptionImage={data.descriptionImage}
                             title={data.title}
                             description={data.description}

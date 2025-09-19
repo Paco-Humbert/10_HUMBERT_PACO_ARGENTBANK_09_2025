@@ -5,29 +5,43 @@ import User from '../../components/User.jsx';
 import Account from '../../components/Account.jsx';
 import AccountCardData from '../../data/AccountCardData.json';
 
-/* User profile page */
+/* 
+   - Récupère les données de l'utilisateur connecté via l'API
+   - Les enregistre dans Redux
+   - Affiche les infos de l'utilisateur et ses comptes
+*/
 function UserProfile () {
+    /* Sélection du token d'authentification dans Redux (présent ou non) */
     const token = useSelector((state) => state.auth.token);
+    /* Initialisation du dispatch Redux pour mettre à jour le state global */
     const dispatch = useDispatch();
 
-    /* Asynchronous function that retrieves user data and updates it with useEffect */
+    /* 
+       useEffect : lancé à chaque fois que le token change
+       
+       - Si un token est présent → l'utilisateur est connecté
+       - On va chercher ses infos dans l'API
+       - Puis on les enregistre dans Redux pour qu'elles soient dispo partout
+    */
     useEffect(() => {
         if (token) {
+            /* Définition d'une fonction asynchrone pour récupérer les données utilisateur */
             const userData = async () => {
                 try {
+                    /* Appel API en POST vers /user/profile avec le token */
                     const response = await fetch('http://localhost:3001/api/v1/user/profile', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
+                            'Authorization': `Bearer ${token}`, // Authentification avec le token
                         },
                     });
+
                     if (response.ok) {
+                        /* Conversion de la réponse en JSON */
                         const data = await response.json();
-                        /* 
-                            Checking that the query response is indeed retrieved
-                            console.log(data) 
-                        */
+                        
+                        /* Construction d'un objet userData avec les infos de l'API */
                         const userData = {
                             createdAt: data.body.createdAt,
                             updatedAt: data.body.updatedAt,
@@ -37,27 +51,33 @@ function UserProfile () {
                             lastname: data.body.lastName,
                             username: data.body.userName
                         }
-                        /* Return user data in redux state */
+
+                        /* Mise à jour du state global Redux avec les données utilisateur */
                         dispatch(userProfile(userData));
+
                     } else {
                         console.log("error while retrieving profile");
                     }
                 } catch (error) {
                     console.error(error);
-                };
+                }
             };
+            /* Exécution de la fonction asynchrone */
             userData();
         }
     }, [dispatch, token]);
 
+    /* 
+       - <User /> : affiche les informations de l'utilisateur
+       - Map sur AccountCardData pour afficher chaque compte
+    */
     return (
         <div className='profile-page'>
             <main className='bg-dark'>
-                {/* Return user componant */}
-                < User />
-                {/* Return items from json file with map */}
+                {/* Composant User : infos + édition du username */}
+                <User />
+                {/* Boucle sur les comptes stockés dans le fichier JSON */}
                 {AccountCardData.map((data) => (
-                    /* Return account component */
                     <Account 
                         key={data.id}
                         title={data.title}
@@ -70,4 +90,4 @@ function UserProfile () {
     )
 }
 
-export default UserProfile
+export default UserProfile;
