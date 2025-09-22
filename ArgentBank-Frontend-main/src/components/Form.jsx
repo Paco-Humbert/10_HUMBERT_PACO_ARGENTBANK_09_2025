@@ -95,7 +95,7 @@ function Form () {
                     <label htmlFor='username'>Username</label>
                     <input 
                         id='username' 
-                        type='text'
+                        type='email'
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                     />

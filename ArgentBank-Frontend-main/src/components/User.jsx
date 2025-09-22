@@ -80,11 +80,8 @@ function User () {
     }
     
     /* 
-       Rendu conditionnel
-       
        - Mode lecture : message de bienvenue + bouton "Edit Name"
        - Mode édition : formulaire pour changer le username
-         (prénom/nom désactivés car non modifiés ici)
     */
     return (
         <div className="header">

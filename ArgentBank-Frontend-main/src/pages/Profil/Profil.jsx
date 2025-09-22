@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { userProfile } from '../../redux/actions/user.actions.jsx';
 import User from '../../components/User.jsx';
 import Account from '../../components/Account.jsx';
-import AccountCardData from '../../data/AccountCardData.json';
+import AccountCardData from '../../data/AccountAmountData.json';
 
 /* 
    - Récupère les données de l'utilisateur connecté via l'API
@@ -30,7 +30,7 @@ function UserProfile () {
                 try {
                     /* Appel API en POST vers /user/profile avec le token */
                     const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-                        method: 'POST',
+                        method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`, // Authentification avec le token
