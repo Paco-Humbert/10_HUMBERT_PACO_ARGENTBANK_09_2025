@@ -19,7 +19,7 @@ const initialState = {
 export const userReducer = (state = initialState, action ) => {
     switch (action.type) {
          /*
-           Cas : Récupération du profil
+          Récupération du profil
           
            - Met à jour l'état avec les données de l'utilisateur
            - Passe le status à "SUCCEEDED" pour indiquer le succès
@@ -31,7 +31,7 @@ export const userReducer = (state = initialState, action ) => {
                 userData: action.payload // les données de l'utilisateur récupérées via l'API
             }
         /*
-           Cas : Modification du username
+          Modification du username
            
            - Met à jour uniquement le champ username
            - Garde les autres données utilisateur inchangées
@@ -47,7 +47,7 @@ export const userReducer = (state = initialState, action ) => {
                 } 
             } 
         /* 
-           Cas : Déconnexion
+          Déconnexion
           
            - Réinitialise l'état utilisateur
            - Supprime toutes les données stockées

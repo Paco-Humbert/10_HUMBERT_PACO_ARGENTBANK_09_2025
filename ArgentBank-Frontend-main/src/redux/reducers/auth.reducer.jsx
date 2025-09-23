@@ -23,7 +23,7 @@ const initialState = {
 export const authReducer = (state = initialState, action) => {
     switch (action.type) {
         /* 
-           Cas : Connexion réussie
+           Connexion réussie
            
            - Met à jour le status à "SUCCEEDED"
            - Active isConnected
@@ -39,7 +39,7 @@ export const authReducer = (state = initialState, action) => {
                 error: null
             }
         /*
-           Cas : Connexion échouée
+           Connexion échouée
           
            - Met à jour le status à "FAILED"
            - Désactive isConnected
@@ -54,7 +54,7 @@ export const authReducer = (state = initialState, action) => {
             }
         }  
         /* 
-           Cas : Déconnexion
+           Déconnexion
           
            - Réinitialise tout l'état d'authentification
            - Supprime le token et les infos de connexion

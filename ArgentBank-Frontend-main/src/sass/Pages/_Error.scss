@@ -1,0 +1,34 @@
+.error {
+    min-height: 610px;
+    width: 100%;
+
+    @media (max-width: 920px) {
+        min-height: 680px;
+    }
+
+    @media (min-width: 1900px) {
+        min-height: 820px;
+    }
+
+    .green-error {
+        margin-top: 6rem;
+        width: 47%;
+    }
+
+    .text-error {
+        margin-top: 2rem;
+    }
+
+    .button-404 {
+        align-items: center;
+        background-color: #00bc77;
+        border-color: #00bc77;
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        margin-top: 2rem;
+        max-width: 12.5rem;
+        padding: 0.8rem;
+    }
+}
