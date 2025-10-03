@@ -5,7 +5,7 @@ import '../../sass/pages/_Error.scss';
 
 function Error () {
     return (
-        <div className="error-page">
+        <div>
             <main>
                 <section className="error">
                     <h2 className="sr-only">Error 404</h2>

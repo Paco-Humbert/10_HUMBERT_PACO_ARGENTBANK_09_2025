@@ -5,7 +5,7 @@ import '../../sass/pages/_SignIn.scss';
 /* Login page */
 function Login () {
     return (
-        <div className='signin-page'>
+        <div>
             <main className='bg-dark'>
                 {/* Returns form component */}
                 < Form />

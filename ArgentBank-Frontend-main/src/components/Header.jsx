@@ -41,7 +41,6 @@ function Header () {
     */
     return (
         <header>
-            <h1 className='sr-only'>Argent Bank</h1>
             <nav>
                 <Link to="/">
                     <img src={Logo} alt="Bank Logo" />
@@ -58,7 +57,7 @@ function Header () {
                         </Link>
                     </div>
                 ) : (
-                    <div className='not-connected'>
+                    <div>
                         <Link to='/login' >
                             <i className="fa-solid fa-circle-user"></i>
                             <p>Sign In</p>

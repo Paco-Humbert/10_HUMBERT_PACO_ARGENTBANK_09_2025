@@ -72,7 +72,7 @@ function UserProfile () {
        - Map sur AccountCardData pour afficher chaque compte
     */
     return (
-        <div className='profile-page'>
+        <div>
             <main className='bg-dark'>
                 {/* Composant User : infos + édition du username */}
                 <User />

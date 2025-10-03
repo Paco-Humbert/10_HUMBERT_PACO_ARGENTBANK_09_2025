@@ -20,8 +20,7 @@ function Home () {
             <main>
                 {/* Returns banner*/}
                 <Banner />
-                <section className="features">
-                    <h2 className='sr-only'>Features</h2>
+                <section className="features">                  
                     {/* Génère dynamiquement les "features" en parcourant le fichier JSON */}
                     {FeaturesItemData.map((data) => (
                         /* Affiche un composant Item pour chaque entrée du JSON */
