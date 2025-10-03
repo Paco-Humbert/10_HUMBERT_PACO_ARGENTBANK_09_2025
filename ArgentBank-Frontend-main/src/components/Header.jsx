@@ -13,7 +13,7 @@ function Header () {
        - firstname : affiche le prénom de l'utilisateur connecté dans le header
     */
     const isConnected = useSelector((state) => state.auth.token);
-    const firstname = useSelector((state) => state.user.userData.firstname);
+    const username = useSelector((state) => state.user.userData.username);
 
     /* Initialisation des hooks Redux et React Router */
     const dispatch = useDispatch();
@@ -50,7 +50,7 @@ function Header () {
                     <div className='connected'>
                         <Link to='/profile'>
                             <i className='fa-solid fa-2x fa-circle-user' />
-                            <p>{firstname}</p>
+                            <p>{username}</p>
                         </Link>
                         <Link to='/' onClick={logoutHandler}>
                             <i className='fa-solid fa-arrow-right-from-bracket' />
