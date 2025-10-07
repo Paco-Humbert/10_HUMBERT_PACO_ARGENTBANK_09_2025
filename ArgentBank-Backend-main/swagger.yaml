@@ -2,10 +2,10 @@ swagger: '2.0'
 info:
   title: Bank Argent API documentation
   description: Contains all available API endpoints in this codebase
-  version: '1.0.0'
+  version: '2.0.0'
   termsOfService: 'http://swagger.io/terms/'
 host: localhost:3001
-basePath: /api/v1
+basePath: /api/v2
 schemes:
   - http
 paths:
@@ -58,7 +58,7 @@ paths:
         '500':
           description: Internal Server Error
   /user/profile:
-    get:
+    post:
       security:
         - Bearer: []
       tags:
@@ -101,6 +101,101 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /accounts:
+    post: 
+      tags:
+        - Accounts and Transactions Module
+      summary: All accounts
+      description: API for retrieving all user account
+      security:
+        - Bearer: []
+      responses: 
+        '200':
+          description: All accounts retrieved successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+        '401':
+          description: Unauthorized user
+        '500':
+          description: Internal Server Error
+  /accounts/{accountID}/transactions:
+    get:
+      tags:
+        - Accounts and Transactions Module
+      summary: Account transactions
+      description: API for retrieving list of transactions assiocated with an account
+      security: 
+        - Bearer: []
+      parameters:
+        - in: path
+          name: accountID
+          description: ID of an account
+          required: true
+          type: string
+        - in: query
+          name: from
+          description: Start date inclusive (YYYY-MM-DD)
+          required: false
+          type: string
+          format: date
+        - in: query
+          name: to
+          description: End date inclusive (YYYY-MM-DD)
+          required: false
+          type: string
+          format: date
+      responses:
+        '200':
+          description: All transactions retrieved successfully
+          schema: 
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '401':
+          description: Unauthorized user
+        '404': 
+          description: Account not found
+        '500':
+          description: Internal Server Error
+  /accounts/{accountID}/transactions/{transactionID}:
+    put:
+      tags:
+        - Accounts and Transactions Module
+      summary: Update transaction's category
+      description: API for updating category of transaction
+      security: 
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          description: ID of a transaction
+          required: true
+          type: string
+        - in: path
+          name: accountID
+          description: ID of an account
+          required: true
+          type: string
+        - in: body
+          name: transaction
+          description: Modified transaction's category and transaction's note
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionData'
+      responses:
+        '200':
+          description: Transaction's category modified successfully
+          schema: 
+            $ref: '#/definitions/Transaction'
+        '401': 
+          description: Unauthorized user
+        '404': 
+          description: Transaction not found
+        '500': 
+          description: Internal Servor Error
+    
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -156,3 +251,56 @@ definitions:
     properties:
       userName:
         type: string
+  Account:
+      type: object
+      properties:
+        accountID:
+          type: string
+          description: account ID
+        accountName:
+          type: string
+          description: account name
+        accountCurrency:
+          type: string
+          description: account currency
+        currentBalance:
+          type: number
+          description: current account balance
+          format: double
+  Transaction:
+    type: object
+    properties:
+      transactionID: 
+        type: string
+        description: transaction ID
+      transactionType:
+        type: string
+        description: type of transaction
+      date:
+        type: string
+        format: date-time
+        description: date of transaction
+      description:
+        type: string
+        description: description of transaction
+      amount:
+        type: number
+        description: transaction amout
+      balance:
+        type: number
+        description: available balance
+        format: double
+      category:
+        type: string
+        description: name of the category
+      note: 
+        type: string
+        description: user note
+  TransactionData:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
+        type: string
+  
