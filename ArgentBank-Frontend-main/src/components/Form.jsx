@@ -46,38 +46,50 @@ function Form () {
             return;
         }
         try {
-             /* Envoi de la requête POST au back-end pour s'authentifier */
+            /* Envoi de la requête POST au back-end pour s'authentifier */
             const response = await fetch("http://localhost:3001/api/v1/user/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 /* On envoie l'email et le mot de passe dans le body */
-                body: JSON.stringify({email, password}),
+                body: JSON.stringify({ email, password }),
             });
+
             if (response.ok) {
                 const data = await response.json();
                 /* Récupération du token renvoyé par l'API */
-                const token = data.body.token;
+                const token = data?.body?.token;
+                if (!token) {
+                    setErrorMessage("No token returned by API");
+                    return;
+                }
+
                 /* Envoi de l'action Redux loginSuccess pour mettre à jour le store */
                 dispatch(loginSuccess(token));
-                /* Stockage du token en session (effacé si l'onglet se ferme) */
-                sessionStorage.setItem("token", token);
-                /* Si l'utilisateur a coché "se souvenir de moi", stockage dans le localStorage */
+
+                /* Stockage du token dans UN SEUL stockage selon rememberMe */
                 if (rememberMe) {
                     localStorage.setItem("token", token);
+                    sessionStorage.removeItem("token");
+                } else {
+                    sessionStorage.setItem("token", token);
+                    localStorage.removeItem("token");
                 }
 
                 /* Redirection vers la page de profil après connexion réussie */
                 navigate('/profile');
             } else {
-                const error = "Incorrect email/password"
+                const error = "Incorrect email/password";
                 dispatch(loginFailed(error));
+                setErrorMessage(error);
             }
         } catch (error) {
             console.error(error);
+            setErrorMessage("Server error");
         }
     }
+
     /* 
        Rendu du formulaire de connexion
       
@@ -98,6 +110,7 @@ function Form () {
                         type='email'
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
+                        autoComplete='username'
                     />
                 </div>
                 <div className='input-wrapper'>
@@ -107,6 +120,7 @@ function Form () {
                         type='password'
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
+                        autoComplete='current-password'
                     />
                 </div>
                 <div className='input-remember'>
@@ -127,4 +141,4 @@ function Form () {
     )
 }
 
-export default Form
+export default Form;

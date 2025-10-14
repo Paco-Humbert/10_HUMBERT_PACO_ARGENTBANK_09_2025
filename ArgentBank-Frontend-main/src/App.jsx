@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch, } from "react-redux";
+import { loginSuccess } from "./redux/actions/auth.actions.jsx";
+
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./pages/Home/Home.jsx";
@@ -9,8 +11,22 @@ import Profile from "./pages/Profil/Profil.jsx";
 import Error from "./pages/Error/Error.jsx";
 import "./sass/_Main.scss";
 
+
+
 function App() {
-  const isConnected = useSelector((state) => state.auth?.isConnected);
+  const dispatch = useDispatch();
+  const token = useSelector((s) => s.auth.token);
+  const isConnected = !!token;            
+  const [booted, setBooted] = useState(false);
+
+  
+  useEffect(() => {
+    const t = localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (t) dispatch(loginSuccess(t));
+    setBooted(true);                      
+  }, [dispatch]);
+
+  if (!booted) return null;     
 
   return (
     <>

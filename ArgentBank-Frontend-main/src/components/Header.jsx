@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../assets/images/argentBankLogo.webp';
 import { logout } from '../redux/actions/auth.actions';
+import { userProfile } from '../redux/actions/user.actions.jsx'; 
 import '../sass/components/_Header.scss';
 
 function Header () {
@@ -10,15 +11,82 @@ function Header () {
        Récupération des données depuis Redux
        
        - isConnected : contient le token si l'utilisateur est connecté
-       - firstname : affiche le prénom de l'utilisateur connecté dans le header
+       - username : affiche l'username de l'utilisateur connecté dans le header
     */
     const isConnected = useSelector((state) => state.auth.token);
-    const username = useSelector((state) => state.user.userData.username);
+    const usernameRedux = useSelector((state) => state.user.userData.username);
+
+    /* State local pour gérer l’affichage du username (corrige le bug après F5) */
+    const [username, setUsername] = useState(
+        localStorage.getItem('username') ||
+        sessionStorage.getItem('username') ||
+        usernameRedux ||
+        ''
+    );
 
     /* Initialisation des hooks Redux et React Router */
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
+    /* 
+       Récupération du username après F5 :
+       
+       - Si token existe mais username absent du storage, on récupère le profil une seule fois
+       - On met à jour Redux et le storage pour éviter les pertes de données
+    */
+    useEffect(() => {
+        if (!isConnected) {
+            setUsername('');
+            return;
+        }
+
+        const storedUsername =
+            localStorage.getItem('username') || sessionStorage.getItem('username');
+
+        if (storedUsername) {
+            setUsername(storedUsername);
+            return;
+        }
+
+        if (usernameRedux) {
+            setUsername(usernameRedux);
+            if (localStorage.getItem('token')) localStorage.setItem('username', usernameRedux);
+            if (sessionStorage.getItem('token')) sessionStorage.setItem('username', usernameRedux);
+            return;
+        }
+
+        // Si aucune donnée locale, on récupère le profil depuis l’API (v1)
+        (async () => {
+            try {
+                const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                if (!token) return;
+
+                const res = await fetch('http://localhost:3001/api/v1/user/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!res.ok) throw new Error('Profile fetch failed');
+                const data = await res.json();
+
+                const name = data?.body?.userName || data?.body?.username || '';
+                setUsername(name);
+
+                dispatch(userProfile({ username: name, ...data?.body }));
+
+                if (localStorage.getItem('token')) localStorage.setItem('username', name);
+                if (sessionStorage.getItem('token')) sessionStorage.setItem('username', name);
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+                setUsername('');
+            }
+        })();
+        
+    }, [isConnected, usernameRedux, dispatch]);
+
     /* 
        Fonction logoutHandler
        
@@ -31,7 +99,8 @@ function Header () {
         sessionStorage.clear();
         localStorage.clear();
         navigate('/');
-    }
+    };
+
     /* 
        Rendu du Header
        
@@ -66,7 +135,7 @@ function Header () {
                 )}
             </nav>
         </header>
-    ) 
+    ); 
 }
 
-export default Header
+export default Header;
