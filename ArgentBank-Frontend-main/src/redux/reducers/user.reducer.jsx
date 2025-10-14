@@ -43,7 +43,7 @@ export const userReducer = (state = initialState, action ) => {
                 status: "MODIFIED",
                 userData: {
                     ...state.userData,  // conserve les autres infos (email, prénom...)
-                    username: action.payload // remplace uniquement le username
+                    username: action.payload.username || action.payload // remplace uniquement le username
                 } 
             } 
         /* 

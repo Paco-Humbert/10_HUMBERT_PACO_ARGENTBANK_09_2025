@@ -12,7 +12,14 @@ import Error from "./pages/Error/Error.jsx";
 import "./sass/_Main.scss";
 
 
+/*
+   Restauration de la session utilisateur
 
+   - Vérifie si un token est présent dans le localStorage ou le sessionStorage
+   - Si un token existe, déclenche l’action Redux loginSuccess() pour rétablir la connexion
+   - Permet de conserver la session après un rechargement ou une fermeture du navigateur
+   - Le state local 'booted' empêche le rendu avant que cette vérification soit terminée
+*/
 function App() {
   const dispatch = useDispatch();
   const token = useSelector((s) => s.auth.token);
