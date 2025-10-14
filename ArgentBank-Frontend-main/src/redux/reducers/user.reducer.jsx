@@ -4,7 +4,7 @@ import { GET_USERPROFILE, EDIT_USERNAME, LOGOUT } from "../actions/type.actions"
    
    - status : état de la requête ("VOID", "SUCCEEDED", "MODIFIED")
    - userData : objet qui contient toutes les données de l'utilisateur
-     (id, email, firstname, lastname, username, etc.)
+     (id, email, firstname, lastname, username, etc)
 */
 const initialState = {
     status: 'VOID',

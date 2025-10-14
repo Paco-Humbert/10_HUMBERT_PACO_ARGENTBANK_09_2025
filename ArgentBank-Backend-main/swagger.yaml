@@ -159,8 +159,8 @@ paths:
           description: Account not found
         '500':
           description: Internal Server Error
-  /accounts/{accountID}/transactions/{transactionID}:
-    put:
+  /transactions/{transactionID}/category:
+    patch:
       tags:
         - Accounts and Transactions Module
       summary: Update transaction's category
@@ -173,29 +173,83 @@ paths:
           description: ID of a transaction
           required: true
           type: string
-        - in: path
-          name: accountID
-          description: ID of an account
-          required: true
-          type: string
         - in: body
-          name: transaction
-          description: Modified transaction's category and transaction's note
+          name: category
+          description: Modified transaction's category
           required: true
           schema:
-            $ref: '#/definitions/TransactionData'
+            $ref: '#/definitions/TransactionCategory'
       responses:
         '200':
           description: Transaction's category modified successfully
           schema: 
-            $ref: '#/definitions/Transaction'
+            $ref: '#/definitions/TransactionCategory'
         '401': 
           description: Unauthorized user
         '404': 
           description: Transaction not found
         '500': 
-          description: Internal Servor Error
-    
+          description: Internal Server Error
+  /transactions/{transactionID}:
+    get:
+      tags:
+        - Accounts and Transactions Module
+      summary: Transaction details
+      description: API for retrieving a single transaction by ID
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          description: ID of a transaction
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Transaction retrieved successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '401':
+          description: Unauthorized user
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+  /transactions/{transactionID}/note:
+    patch:
+      tags:
+        - Accounts and Transactions Module
+      summary: Update transaction note
+      description: Update the transaction's note. To clear the note, send null or an empty string.
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          description: ID of a transaction
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Note to set (use null or "" to clear)
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionNote'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction note updated successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid payload
+        '401':
+          description: Unauthorized user
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -296,11 +350,21 @@ definitions:
       note: 
         type: string
         description: user note
+  TransactionCategory:
+    type: object
+    properties:
+      category:
+        type: string
   TransactionData:
     type: object
     properties:
       category:
         type: string
+      note:
+        type: string
+  TransactionNote:
+    type: object
+    properties:
       note:
         type: string
   

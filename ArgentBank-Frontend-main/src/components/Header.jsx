@@ -6,13 +6,31 @@ import { logout } from '../redux/actions/auth.actions';
 import '../sass/components/_Header.scss';
 
 function Header() {
-  
+    /*
+     Récupération des données Redux
+     
+     - isConnected : contient le token de l'utilisateur s'il est connecté
+     - username : affiche dynamiquement le nom d'utilisateur depuis Redux
+       (se met à jour immédiatement après modification du profil)
+  */
   const isConnected = useSelector((state) => state.auth.token);
   const username = useSelector((state) => state.user.userData.username);
-
+  /* 
+     Initialisation des hooks Redux et React Router
+     
+     - dispatch : permet de déclencher une action Redux
+     - navigate : redirige l'utilisateur après la déconnexion
+  */
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+    /* 
+      Fonction de déconnexion
+     
+     - Déclenche l'action logout()
+     - Vide le localStorage et le sessionStorage
+     - Redirige vers la page d'accueil
+  */
   const logoutHandler = () => {
     dispatch(logout());
     sessionStorage.clear();

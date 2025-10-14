@@ -113,7 +113,7 @@ function User () {
                             />
                         </div>
 
-                        {/* Champs informatifs, non modifiables ici */}
+                        {/* Champs informatifs, non modifiables  */}
                         <div className="edit-input">
                             <label htmlFor="firstname">First name:</label>
                             <input
